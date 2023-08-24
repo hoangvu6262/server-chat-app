@@ -14,7 +14,7 @@ const port = process.env.PORT
 app.use(cors())
 app.use(bodyParser.json())
 mongodbConnection()
-app.use('/', router())
+app.use('/api', router())
 
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`)
