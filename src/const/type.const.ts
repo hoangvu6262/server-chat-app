@@ -13,7 +13,7 @@ interface IUser extends Document {
 //common type
 interface IMessage {
     msg: string
-    status: boolean
+    status?: boolean
 }
 
 export { IUser, IMessage }
