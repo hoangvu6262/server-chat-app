@@ -1,15 +1,21 @@
-import express, { Request, Response } from 'express'
+import express, { Express } from 'express'
 import dotenv from 'dotenv'
+import cors from 'cors'
+import bodyParser from 'body-parser'
+
+import mongodbConnection from './configs/mongdodb.config'
+import router from './routes/root.route'
 
 dotenv.config()
 
-const app = express()
-const port = process.env.PORT || 8080
+const app: Express = express()
+const port = process.env.PORT
 
-app.get('/', (_req: Request, res: Response) => {
-    res.send('Hello World!')
-})
+app.use(cors())
+app.use(bodyParser.json())
+mongodbConnection()
+app.use('/', router())
 
 app.listen(port, () => {
-    console.log(`App listening on port ${port}`)
+    console.log(`[server]: Server is running at http://localhost:${port}`)
 })
