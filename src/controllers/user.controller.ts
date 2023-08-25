@@ -59,7 +59,7 @@ const register = async (req: Request, res: Response) => {
 const logOut = (req: Request, res: Response) => {
     try {
         if (!req.params.id) return res.json({ msg: 'User id is required ' })
-        onlineUsers.delete(req.params.id)
+        global.onlineUsers.delete(req.params.id)
         return res.status(200).send()
     } catch (err) {
         throw new Error(err)
