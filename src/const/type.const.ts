@@ -10,10 +10,17 @@ interface IUser extends Document {
     avatarImage: string
 }
 
+interface IMessage extends Document {
+    _id: string
+    message: string
+    users: IUser[]
+    sender: string
+}
+
 //common type
-interface IMessage {
+interface IMessageResponse {
     msg: string
     status?: boolean
 }
 
-export { IUser, IMessage }
+export { IUser, IMessage, IMessageResponse }

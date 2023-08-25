@@ -15,6 +15,12 @@ const socketConnection = (server: any) => {
             global.onlineUsers.set(userId, socket.id)
             console.log(`[socket]: Add user suscessfull ${userId}`)
         })
+        socket.on('send-msg', (data) => {
+            const sendUserSocket = onlineUsers.get(data.to)
+            if (sendUserSocket) {
+                socket.to(sendUserSocket).emit('msg-recieve', data.msg)
+            }
+        })
     })
 }
 

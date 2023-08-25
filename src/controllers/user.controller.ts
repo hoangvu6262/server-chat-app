@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import { IUser, IMessage } from '../const/type.const'
+import { IUser, IMessageResponse } from '../const/type.const'
 import {
     // getUserByID,
     getUserByName,
     getUserByEmail,
     creatNewUser,
-    // getAllUsers,
+    getAllUsers,
 } from '../services/user.services'
 import {
     isPasswordValidCheck,
@@ -16,7 +16,7 @@ const login = async (req: Request, res: Response) => {
     try {
         const { username, password } = req.body
         const user: IUser | null = await getUserByName(username)
-        const message: IMessage = {
+        const message: IMessageResponse = {
             msg: 'Incorrect Username or Password',
             status: false,
         }
@@ -66,4 +66,13 @@ const logOut = (req: Request, res: Response) => {
     }
 }
 
-export { login, register, logOut }
+const getAllUsersInRoom = async (req: Request, res: Response) => {
+    try {
+        const users = await getAllUsers(req.params.id)
+        return res.json(users)
+    } catch (err) {
+        throw new Error(err)
+    }
+}
+
+export { login, register, logOut, getAllUsersInRoom }
