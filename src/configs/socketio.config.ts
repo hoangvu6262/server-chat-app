@@ -11,13 +11,18 @@ const socketConnection = (server: any) => {
     global.onlineUsers = new Map<string, string>()
     io.on('connection', (socket) => {
         global.chatSocket = socket
+
+        // add user to the chat room
         socket.on('add-user', (userId) => {
             global.onlineUsers.set(userId, socket.id)
             console.log(`[socket]: Add user suscessfull ${userId}`)
         })
+
+        // user send message
         socket.on('send-msg', (data) => {
-            const sendUserSocket = onlineUsers.get(data.to)
+            const sendUserSocket = global.onlineUsers.get(data.to)
             if (sendUserSocket) {
+                // user recived message
                 socket.to(sendUserSocket).emit('msg-recieve', data.msg)
             }
         })
