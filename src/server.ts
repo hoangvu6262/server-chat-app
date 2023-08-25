@@ -4,6 +4,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 
 import mongodbConnection from './configs/mongdodb.config'
+import socketConnection from './configs/socketio.config'
 import router from './routes/root.route'
 
 dotenv.config()
@@ -16,6 +17,8 @@ app.use(bodyParser.json())
 mongodbConnection()
 app.use('/api', router())
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`)
 })
+
+socketConnection(server)

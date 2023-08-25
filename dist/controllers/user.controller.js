@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.register = exports.login = void 0;
+exports.getAllUsersInRoom = exports.logOut = exports.register = exports.login = void 0;
 const user_services_1 = require("../services/user.services");
 const authentication_helper_1 = require("../helpers/authentication.helper");
 const login = async (req, res) => {
@@ -45,4 +45,26 @@ const register = async (req, res) => {
     }
 };
 exports.register = register;
+const logOut = (req, res) => {
+    try {
+        if (!req.params.id)
+            return res.json({ msg: 'User id is required ' });
+        onlineUsers.delete(req.params.id);
+        return res.status(200).send();
+    }
+    catch (err) {
+        throw new Error(err);
+    }
+};
+exports.logOut = logOut;
+const getAllUsersInRoom = async (req, res) => {
+    try {
+        const users = await (0, user_services_1.getAllUsers)(req.params.id);
+        return res.json(users);
+    }
+    catch (err) {
+        throw new Error(err);
+    }
+};
+exports.getAllUsersInRoom = getAllUsersInRoom;
 //# sourceMappingURL=user.controller.js.map
