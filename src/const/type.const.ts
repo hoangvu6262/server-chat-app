@@ -2,12 +2,16 @@ import { Document } from 'mongoose'
 
 //model type
 interface IUser extends Document {
-    _id: string
+    _id?: string
     username: string
+    userId: String
     email: string
     password: string
-    isAvatarImageSet: boolean
+    isAvatarImageSet?: boolean
     avatarImage: string
+
+    createdAt?: string
+    updatedAt?: string
 }
 
 interface IMessage extends Document {
@@ -15,6 +19,80 @@ interface IMessage extends Document {
     message: string
     users: IUser[]
     sender: string
+    fileUrl: string
+    channel: IChannel
+
+    createdAt: string
+    updatedAt: string
+}
+
+interface IServer extends Document {
+    _id: string
+    name: string
+    imageUrl: string
+    inviteCode: string
+
+    user: IUser
+
+    members: IMember[]
+    channels: IChannel[]
+
+    createdAt: string
+    updatedAt: string
+}
+
+interface IMember extends Document {
+    _id: string
+    role: string
+    user: IUser
+    server: IServer
+
+    messages: IMessage[]
+    directMessages: IDirectMessage[]
+
+    conversationsInitiated: IConversation[]
+    conversationsReceived: IConversation[]
+
+    createdAt: string
+    updatedAt: string
+}
+
+interface IChannel extends Document {
+    _id: string
+    name: string
+    type: string
+
+    user: IUser
+    server: IServer
+
+    messages: IMessage[]
+
+    createdAt: string
+    updatedAt: string
+}
+
+interface IConversation extends Document {
+    _id: string
+    memberOneId: string
+    memberOne: IMember
+
+    memberTwoId: string
+    memberTwo: IMember
+
+    directMessages: IDirectMessage[]
+}
+
+interface IDirectMessage extends Document {
+    _id: string
+    content: string
+    fileUrl: string
+
+    member: IMember
+
+    conversation: IConversation
+
+    createdAt: string
+    updatedAt: string
 }
 
 //common type
@@ -23,4 +101,13 @@ interface IMessageResponse {
     status?: boolean
 }
 
-export { IUser, IMessage, IMessageResponse }
+export {
+    IUser,
+    IMessage,
+    IMessageResponse,
+    IServer,
+    IChannel,
+    IConversation,
+    IDirectMessage,
+    IMember,
+}
