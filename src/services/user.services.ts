@@ -4,6 +4,10 @@ const getUserByID = (id: string) => {
     return User.findById(id)
 }
 
+const getUserByUserID = (userId: string) => {
+    return User.findOne({ userId })
+}
+
 const getUserByName = (username: string) => {
     return User.findOne({ username })
 }
@@ -25,4 +29,11 @@ const getAllUsers = (id: string) => {
     ])
 }
 
-export { getUserByID, getUserByName, getUserByEmail, creatNewUser, getAllUsers }
+export {
+    getUserByID,
+    getUserByName,
+    getUserByEmail,
+    creatNewUser,
+    getAllUsers,
+    getUserByUserID,
+}

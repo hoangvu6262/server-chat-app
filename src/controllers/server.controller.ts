@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { IServer, IUser } from 'src/const/type.const'
-import { getUserByID } from 'src/services/user.services'
+import { IServer, IUser } from '../const/type.const'
+import { getUserByUserID } from '../services/user.services'
 import {
     // getServerByName,
     creatNewServer,
@@ -34,7 +34,7 @@ const createNewServerByUser = async (req: Request, res: Response) => {
             throw new Error('Server Id is required!')
         }
 
-        const user: IUser | null = await getUserByID(userId)
+        const user: IUser | null = await getUserByUserID(userId)
         if (!user) {
             throw new Error('UserId is not corrected!')
         }

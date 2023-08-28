@@ -5,9 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const auth_route_1 = __importDefault(require("./auth.route"));
+const server_route_1 = __importDefault(require("./server.route"));
 const router = express_1.default.Router();
 exports.default = () => {
     (0, auth_route_1.default)(router);
+    (0, server_route_1.default)(router);
     return router;
 };
 //# sourceMappingURL=root.route.js.map

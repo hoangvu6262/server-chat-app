@@ -4,9 +4,9 @@ import {
     createNewServerByUser,
 } from '../controllers/server.controller'
 
-const authRoute = (router: Router) => {
-    router.post('/server/addmsg/:userId', getAllServerByUserId)
-    router.post('/server/getmsg/', createNewServerByUser)
+const serverRoute = (router: Router) => {
+    router.get('/server/:userId', getAllServerByUserId)
+    router.post('/server', createNewServerByUser)
 }
 
-export default authRoute
+export default serverRoute
