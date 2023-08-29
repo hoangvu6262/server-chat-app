@@ -9,16 +9,15 @@ const userModel = new mongoose_1.Schema({
         max: 20,
         unique: true,
     },
+    userId: {
+        type: String,
+        required: true,
+    },
     email: {
         type: String,
         required: true,
         unique: true,
         max: 50,
-    },
-    password: {
-        type: String,
-        required: true,
-        min: 8,
     },
     isAvatarImageSet: {
         type: Boolean,

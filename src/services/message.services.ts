@@ -9,7 +9,6 @@ const getAllMessages = (from: string, to: string) => {
 }
 
 const addMessage = (message: Record<string, any>) => {
-    console.log(message)
     return Message.create(message)
 }
 

@@ -14,7 +14,8 @@ const uploadFile = (path: string) => {
         use_filename: true,
         unique_filename: false,
         overwrite: true,
-        transformation: [{ width: 1000, height: 752, crop: 'scale' }],
+        foler: 'Server',
+        transformation: [{ width: 400, height: 400, crop: 'scale' }],
     }
 
     return cloudinary.uploader.upload(path, options)

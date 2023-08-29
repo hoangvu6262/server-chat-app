@@ -8,17 +8,14 @@ const serverModel: Schema = new Schema(
         imageUrl: { type: String, require: true },
         inviteCode: { type: String },
 
-        user: {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
-        },
+        userId: { type: String, require: true },
 
         members: {
-            type: Schema.Types.ObjectId,
+            type: Schema.Types.Array,
             ref: 'Member',
         },
         channels: {
-            type: Schema.Types.ObjectId,
+            type: Schema.Types.Array,
             ref: 'Channel',
         },
 

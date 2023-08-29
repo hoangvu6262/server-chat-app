@@ -6,7 +6,7 @@ interface IUser extends Document {
     username: string
     userId: String
     email: string
-    password: string
+
     isAvatarImageSet?: boolean
     avatarImage: string
 

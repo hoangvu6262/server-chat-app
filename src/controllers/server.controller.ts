@@ -1,47 +1,68 @@
 import { Request, Response } from 'express'
-import { IServer, IUser } from '../const/type.const'
-import { getUserByUserID } from '../services/user.services'
+import { IServer } from '../const/type.const'
 import {
     // getServerByName,
     creatNewServer,
     // deleteServer,
     getAllServerByUser,
+    getServerByID,
 } from '../services/server.services'
+import { uploadFile } from './upload.controller'
 
 const getAllServerByUserId = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params
 
         if (!userId) {
-            throw new Error('User Id is required!')
+            res.json({
+                status: false,
+                message: 'UserId is required',
+            })
         }
         const servers: IServer[] = await getAllServerByUser(userId)
 
         res.json(servers)
     } catch (err) {
-        throw new Error(err)
+        res.json({
+            status: false,
+            message: 'Something went wrong',
+            err: err.message,
+        })
     }
 }
 
 const createNewServerByUser = async (req: Request, res: Response) => {
     try {
         const { userId, server } = req.body
+        const { name, imageUrl } = server
 
         if (!userId) {
-            throw new Error('User Id is required!')
+            res.json({
+                status: false,
+                message: 'UserId is required',
+            })
         }
-        if (!server) {
-            throw new Error('Server Id is required!')
+        if (!name || !imageUrl) {
+            res.json({
+                status: false,
+                message: 'Server is required',
+            })
         }
 
-        const user: IUser | null = await getUserByUserID(userId)
-        if (!user) {
-            throw new Error('UserId is not corrected!')
-        }
+        const imageServer = await uploadFile(imageUrl)
+
+        // const user: IUser | null = await getUserByUserID(userId)
+        // if (!user) {
+        //     res.json({
+        //         status: false,
+        //         message: 'UserId is not corrected!',
+        //     })
+        // }
 
         const newServer: IServer = await creatNewServer({
             ...server,
-            user: user,
+            imageUrl: imageServer.url,
+            userId,
         })
 
         res.json({
@@ -50,8 +71,33 @@ const createNewServerByUser = async (req: Request, res: Response) => {
             server: newServer,
         })
     } catch (err) {
-        throw new Error(err)
+        res.json({
+            status: false,
+            message: 'Something went wrong',
+            err: err.message,
+        })
     }
 }
 
-export { getAllServerByUserId, createNewServerByUser }
+const getServerById = async (req: Request, res: Response) => {
+    const { serverId } = req.params
+    try {
+        if (!serverId) {
+            res.json({
+                status: false,
+                message: 'Server Id is required',
+            })
+        }
+        const server = await getServerByID(serverId)
+
+        res.json(server)
+    } catch (err) {
+        res.json({
+            status: false,
+            message: 'Something went wrong',
+            err: err.message,
+        })
+    }
+}
+
+export { getAllServerByUserId, createNewServerByUser, getServerById }

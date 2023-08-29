@@ -1,15 +1,16 @@
-import { IServer } from 'src/const/type.const'
 import Server from '../models/server.model'
 
-const getAllServerByUser = (userID: string) => {
-    return Server.find((server: IServer) => server.user.userId === userID)
+const getAllServerByUser = (userId: string) => {
+    return Server.find({
+        userId,
+    })
 }
 
 const getServerByName = (name: string) => {
     return Server.findOne({ name })
 }
 
-const getServerByID = (id: number) => {
+const getServerByID = (id: string) => {
     return Server.findById(id)
 }
 
@@ -21,15 +22,10 @@ const deleteServer = (id: string) => {
     return Server.findByIdAndDelete(id)
 }
 
-const getServerByUserID = (userID: string) => {
-    return Server.findOne((server: IServer) => server.user.userId === userID)
-}
-
 export {
     getServerByName,
     creatNewServer,
     deleteServer,
     getServerByID,
-    getServerByUserID,
     getAllServerByUser,
 }
