@@ -14,12 +14,16 @@ const getServerByID = (id: string) => {
     return Server.findById(id)
 }
 
-const creatNewServer = (user: Record<string, any>) => {
-    return Server.create(user)
+const creatNewServer = (server: Record<string, any>) => {
+    return Server.create(server)
 }
 
 const deleteServer = (id: string) => {
     return Server.findByIdAndDelete(id)
+}
+
+const updateServer = (server: Record<string, any>, id: string) => {
+    return Server.findByIdAndUpdate(id, server, { new: true })
 }
 
 export {
@@ -28,4 +32,5 @@ export {
     deleteServer,
     getServerByID,
     getAllServerByUser,
+    updateServer,
 }
