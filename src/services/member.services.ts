@@ -1,4 +1,4 @@
-import Member from '../models/Member.model'
+import Member from '../models/member.model'
 
 const getAllMemberByServer = (serverId: string) => {
     return Member.find({ serverId })
