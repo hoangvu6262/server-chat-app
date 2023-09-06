@@ -44,8 +44,8 @@ interface IServer extends Document {
 interface IMember extends Document {
     _id: string
     role: string
-    user: IUser
-    server: IServer
+    userId: string
+    serverId: string
 
     messages: IMessage[]
     directMessages: IDirectMessage[]
@@ -74,10 +74,8 @@ interface IChannel extends Document {
 interface IConversation extends Document {
     _id: string
     memberOneId: string
-    memberOne: IMember
 
     memberTwoId: string
-    memberTwo: IMember
 
     directMessages: IDirectMessage[]
 }
@@ -87,9 +85,9 @@ interface IDirectMessage extends Document {
     content: string
     fileUrl: string
 
-    member: IMember
+    memberId: string
 
-    conversation: IConversation
+    conversationId: string
 
     createdAt: string
     updatedAt: string
