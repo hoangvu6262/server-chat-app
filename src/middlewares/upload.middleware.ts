@@ -1,4 +1,4 @@
-import multer, { FileFilterCallback } from 'multer'
+import multer from 'multer'
 import { storage } from '../configs/cloudinary.config'
 import { fileFilter } from '../services/upload.services'
 
