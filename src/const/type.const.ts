@@ -44,8 +44,8 @@ interface IServer extends Document {
 interface IMember extends Document {
     _id: string
     role: string
-    user: IUser
-    server: IServer
+    userId: string
+    serverId: string
 
     messages: IMessage[]
     directMessages: IDirectMessage[]
