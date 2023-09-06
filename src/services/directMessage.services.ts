@@ -12,4 +12,13 @@ const deleteDirectMessage = (id: string) => {
     return DirectMessage.findByIdAndDelete(id)
 }
 
-export { creatNewDirectMessage, deleteDirectMessage, getDirectMessageByID }
+const getAllDirectMessByConversation = (conversationId: string) => {
+    return DirectMessage.find({ conversationId })
+}
+
+export {
+    creatNewDirectMessage,
+    deleteDirectMessage,
+    getDirectMessageByID,
+    getAllDirectMessByConversation,
+}
