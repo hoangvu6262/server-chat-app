@@ -13,14 +13,14 @@ cloudinary.config({
 //multipart/form-data
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
-    params: async () => {
+    params: async (_req: Express.Request, file: Express.Multer.File) => {
         // async code using `req` and `file`
         // ...
         return {
             folder: 'ChatAppFile',
             allowed_formats: ['jpg', 'png'],
             unique_filename: true,
-            public_id: 'some_unique_id',
+            public_id: `${Date.now()} ${file.filename}`,
         }
     },
 })
