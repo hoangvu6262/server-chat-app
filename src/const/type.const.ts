@@ -62,8 +62,8 @@ interface IChannel extends Document {
     name: string
     type: string
 
-    user: IUser
-    server: IServer
+    userId: string
+    serverId: string
 
     messages: IMessage[]
 
