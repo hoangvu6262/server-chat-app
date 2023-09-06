@@ -34,8 +34,8 @@ const getAllServerByUserId = async (req: Request, res: Response) => {
 
 const createNewServerByUser = async (req: Request, res: Response) => {
     try {
-        const { userId, server } = req.body
-        const { name, imageUrl } = server
+        const { userId, name } = req.body
+        const file = req.file
 
         if (!userId) {
             res.json({
@@ -43,14 +43,21 @@ const createNewServerByUser = async (req: Request, res: Response) => {
                 message: 'UserId is required',
             })
         }
-        if (!name || !imageUrl) {
+        if (!name) {
             res.json({
                 status: false,
-                message: 'Server is required',
+                message: 'Name of Server is required',
             })
         }
 
-        const imageServer = await uploadFile(imageUrl)
+        if (!file) {
+            res.json({
+                status: false,
+                message: 'Image of server is required',
+            })
+        }
+
+        const imageServer = await uploadFile(file?.path as string)
 
         // const user: IUser | null = await getUserByUserID(userId)
         // if (!user) {
@@ -61,7 +68,7 @@ const createNewServerByUser = async (req: Request, res: Response) => {
         // }
 
         const newServer: IServer = await creatNewServer({
-            ...server,
+            name,
             imageUrl: imageServer.url,
             userId,
         })
