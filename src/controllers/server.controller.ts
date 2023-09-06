@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { IServer } from '../const/type.const'
 import {
     // getServerByName,
+    updateServer,
     creatNewServer,
     // deleteServer,
     getAllServerByUser,
@@ -100,4 +101,26 @@ const getServerById = async (req: Request, res: Response) => {
     }
 }
 
-export { getAllServerByUserId, createNewServerByUser, getServerById }
+const updateServerById = async (req: Request, res: Response) => {
+    const { id } = req.params
+    try {
+        await updateServer(req.body, id)
+        res.json({
+            status: true,
+            message: `Update server: ${id} successfully `,
+        })
+    } catch (err) {
+        res.json({
+            status: false,
+            message: 'Something went wrong',
+            err: err.message,
+        })
+    }
+}
+
+export {
+    getAllServerByUserId,
+    createNewServerByUser,
+    getServerById,
+    updateServerById,
+}

@@ -5,7 +5,7 @@ import {
     getAllDirectMessByConversation,
     creatNewDirectMessage,
     getDirectMessageByID,
-} from '../services/DirectMessage.services'
+} from '../services/directMessage.services'
 
 const getAllDirectMessageConversationId = async (
     req: Request,

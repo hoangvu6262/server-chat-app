@@ -4,7 +4,7 @@ import { IConversation } from '../const/type.const'
 import {
     creatNewConversation,
     getConversationByID,
-} from '../services/Conversation.services'
+} from '../services/conversation.services'
 
 const getConversationById = async (req: Request, res: Response) => {
     const { id } = req.params
