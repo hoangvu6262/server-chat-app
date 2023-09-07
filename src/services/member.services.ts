@@ -4,6 +4,10 @@ const getAllMemberByServer = (serverId: string) => {
     return Member.find({ serverId })
 }
 
+const getMemberByUserAndServer = (userId: string, serverId: string) => {
+    return Member.findOne({ userId, serverId })
+}
+
 const getMemberByUser = (userId: string) => {
     return Member.findOne({ userId })
 }
@@ -26,4 +30,5 @@ export {
     deleteMember,
     getMemberByID,
     getAllMemberByServer,
+    getMemberByUserAndServer,
 }
