@@ -20,9 +20,9 @@ const getAllMemberServer = async (req: Request, res: Response) => {
             })
         }
 
-        const Members: IMember[] = await getAllMemberByServer(serverId)
+        const members: IMember[] = await getAllMemberByServer(serverId)
 
-        res.json(Members)
+        res.json(members)
     } catch (err) {
         res.json({
             status: false,
@@ -41,8 +41,8 @@ const getMemberById = async (req: Request, res: Response) => {
                 message: 'Id is required',
             })
         }
-        const Member: IMember | null = await getMemberByID(id)
-        res.json(Member)
+        const member: IMember | null = await getMemberByID(id)
+        res.json(member)
     } catch (err) {
         res.json({
             status: false,
@@ -95,9 +95,9 @@ const addNewMember = async (req: Request, res: Response) => {
             })
         }
 
-        const server = await creatNewMember(body)
+        const newMember = await creatNewMember(body)
 
-        res.json(server)
+        res.json(newMember)
     } catch (err) {
         res.json({
             status: false,
