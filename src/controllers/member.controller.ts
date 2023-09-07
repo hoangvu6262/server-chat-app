@@ -6,6 +6,7 @@ import {
     creatNewMember,
     getMemberByID,
     deleteMember,
+    getMemberByUser,
 } from '../services/member.services'
 
 const getAllMemberServer = async (req: Request, res: Response) => {
@@ -85,9 +86,18 @@ const addNewMember = async (req: Request, res: Response) => {
             })
         }
 
-        const member = await creatNewMember(body)
+        const member: IMember | null = await getMemberByUser(body.userId)
 
-        res.json(member)
+        if (member) {
+            res.json({
+                status: false,
+                message: 'Meber is existed',
+            })
+        }
+
+        const newMember = await creatNewMember(body)
+
+        res.json(newMember)
     } catch (err) {
         res.json({
             status: false,
