@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { creatNewMember } from '../services/member.services'
 import { IServer } from '../const/type.const'
 import {
     // getServerByName,
@@ -38,20 +39,20 @@ const createNewServerByUser = async (req: Request, res: Response) => {
         const file = req.file
 
         if (!userId) {
-            res.json({
+            res.status(404).json({
                 status: false,
                 message: 'UserId is required',
             })
         }
         if (!name) {
-            res.json({
+            res.status(404).json({
                 status: false,
                 message: 'Name of Server is required',
             })
         }
 
         if (!file) {
-            res.json({
+            res.status(404).json({
                 status: false,
                 message: 'Image of server is required',
             })
@@ -59,18 +60,16 @@ const createNewServerByUser = async (req: Request, res: Response) => {
 
         const imageServer = await uploadFile(file?.path as string)
 
-        // const user: IUser | null = await getUserByUserID(userId)
-        // if (!user) {
-        //     res.json({
-        //         status: false,
-        //         message: 'UserId is not corrected!',
-        //     })
-        // }
-
         const newServer: IServer = await creatNewServer({
             name,
             imageUrl: imageServer.url,
             userId,
+        })
+
+        await creatNewMember({
+            role: 'Admin',
+            userId,
+            serverId: newServer._id,
         })
 
         res.json({

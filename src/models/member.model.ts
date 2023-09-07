@@ -3,7 +3,11 @@ import { IMember } from 'src/const/type.const'
 
 const memberSchema: Schema = new Schema(
     {
-        role: { type: String, require: true },
+        role: {
+            type: String,
+            require: true,
+            enum: ['Admin', 'Guest', 'Moderator'],
+        },
         userId: {
             type: String,
             required: true,
