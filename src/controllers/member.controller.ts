@@ -6,7 +6,7 @@ import {
     creatNewMember,
     getMemberByID,
     deleteMember,
-    getMemberByUser,
+    getMemberByUserAndServer,
 } from '../services/member.services'
 
 const getAllMemberServer = async (req: Request, res: Response) => {
@@ -14,7 +14,7 @@ const getAllMemberServer = async (req: Request, res: Response) => {
         const { serverId } = req.params
 
         if (!serverId) {
-            res.json({
+            return res.json({
                 status: false,
                 message: 'ServerId are required',
             })
@@ -22,9 +22,9 @@ const getAllMemberServer = async (req: Request, res: Response) => {
 
         const members: IMember[] = await getAllMemberByServer(serverId)
 
-        res.json(members)
+        return res.json(members)
     } catch (err) {
-        res.json({
+        return res.json({
             status: false,
             message: 'Something went wrong',
             err: err.message,
@@ -36,15 +36,15 @@ const getMemberById = async (req: Request, res: Response) => {
     const { id } = req.params
     try {
         if (!id) {
-            res.json({
+            return res.json({
                 status: false,
                 message: 'Id is required',
             })
         }
         const member: IMember | null = await getMemberByID(id)
-        res.json(member)
+        return res.json(member)
     } catch (err) {
-        res.json({
+        return res.json({
             status: false,
             message: 'Something went wrong',
             err: err.message,
@@ -56,18 +56,18 @@ const deleteMemberById = async (req: Request, res: Response) => {
     const { id } = req.params
     try {
         if (!id) {
-            res.json({
+            return res.json({
                 status: false,
                 message: 'Id is required',
             })
         }
         await deleteMember(id)
-        res.json({
+        return res.json({
             status: true,
             message: `Delete member: ${id} successfully `,
         })
     } catch (err) {
-        res.json({
+        return res.json({
             status: false,
             message: 'Something went wrong',
             err: err.message,
@@ -80,26 +80,29 @@ const addNewMember = async (req: Request, res: Response) => {
         const body = req.body
 
         if (!body) {
-            res.json({
+            return res.json({
                 status: false,
                 message: 'Body data is required',
             })
         }
 
-        const member: IMember | null = await getMemberByUser(body.userId)
+        const member: IMember | null = await getMemberByUserAndServer(
+            body.userId,
+            body.serverId
+        )
 
         if (member) {
-            res.json({
+            return res.json({
                 status: false,
-                message: 'Meber is existed',
+                message: 'Meber has already existed in server',
             })
         }
 
         const newMember = await creatNewMember(body)
 
-        res.json(newMember)
+        return res.json(newMember)
     } catch (err) {
-        res.json({
+        return res.json({
             status: false,
             message: 'Something went wrong',
             err: err.message,
