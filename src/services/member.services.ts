@@ -1,27 +1,36 @@
 import Member from '../models/member.model'
 
 const getAllMemberByServer = (serverId: string) => {
-    return Member.find({ serverId })
-}
-
-const getMemberByUserAndServer = (userId: string, serverId: string) => {
-    return Member.findOne({ userId, serverId })
+    return Member.find({ serverId }).populate('serverId').exec()
 }
 
 const getMemberByUser = (userId: string) => {
-    return Member.findOne({ userId })
+    return Member.findOne({ userId }).populate({
+        path: 'servers',
+    })
 }
 
 const getMemberByID = (id: string) => {
     return Member.findById(id)
 }
 
-const creatNewMember = (value: Record<string, any>) => {
+const creatNewMember = async (value: Record<string, any>) => {
     return Member.create(value)
 }
 
 const deleteMember = (id: string) => {
     return Member.findByIdAndDelete(id)
+}
+
+const updateNewServerMember = (memberId: string, serverId: string) => {
+    return Member.updateOne(
+        { _id: memberId },
+        {
+            $push: {
+                servers: serverId,
+            },
+        }
+    )
 }
 
 export {
@@ -30,5 +39,5 @@ export {
     deleteMember,
     getMemberByID,
     getAllMemberByServer,
-    getMemberByUserAndServer,
+    updateNewServerMember,
 }

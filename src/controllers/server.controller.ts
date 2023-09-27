@@ -1,31 +1,38 @@
 import { Request, Response } from 'express'
-import { creatNewMember } from '../services/member.services'
-import { IServer } from '../const/type.const'
+import mongoose from 'mongoose'
+import { IMember, IServer } from '../const/type.const'
 import {
     // getServerByName,
     updateServer,
-    creatNewServer,
     // deleteServer,
     getAllServerByUser,
     getServerByID,
+    updateNewMemberServer,
+    creatNewServer,
 } from '../services/server.services'
+import {
+    creatNewMember,
+    updateNewServerMember,
+    getMemberByUser,
+} from '../services/member.services'
 import { uploadFile } from './upload.controller'
+import { MEMBER_ROLE } from '../const/roleUser.const'
 
 const getAllServerByUserId = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params
 
         if (!userId) {
-            res.json({
+            return res.status(404).json({
                 status: false,
                 message: 'UserId is required',
             })
         }
         const servers: IServer[] = await getAllServerByUser(userId)
 
-        res.json(servers)
+        return res.status(200).json(servers)
     } catch (err) {
-        res.json({
+        return res.status(500).json({
             status: false,
             message: 'Something went wrong',
             err: err.message,
@@ -39,20 +46,20 @@ const createNewServerByUser = async (req: Request, res: Response) => {
         const file = req.file
 
         if (!userId) {
-            res.status(404).json({
+            return res.status(404).json({
                 status: false,
                 message: 'UserId is required',
             })
         }
         if (!name) {
-            res.status(404).json({
+            return res.status(404).json({
                 status: false,
                 message: 'Name of Server is required',
             })
         }
 
         if (!file) {
-            res.status(404).json({
+            return res.status(404).json({
                 status: false,
                 message: 'Image of server is required',
             })
@@ -60,25 +67,35 @@ const createNewServerByUser = async (req: Request, res: Response) => {
 
         const imageServer = await uploadFile(file?.path as string)
 
-        const newServer: IServer = await creatNewServer({
+        const newServer = creatNewServer({
+            _id: new mongoose.Types.ObjectId(),
             name,
             imageUrl: imageServer.url,
             userId,
         })
 
-        await creatNewMember({
-            role: 'Admin',
-            userId,
-            serverId: newServer._id,
-        })
+        const member: IMember | null = await getMemberByUser(userId)
 
-        res.json({
+        if (!member) {
+            const newMember = await creatNewMember({
+                serverId: newServer._id,
+                userId: userId,
+                role: MEMBER_ROLE.ADMIN,
+            })
+            await updateNewMemberServer(newServer._id, newMember)
+            await updateNewServerMember(newMember._id, newServer._id)
+        } else {
+            await updateNewMemberServer(newServer._id, member)
+            await updateNewServerMember(member._id, newServer._id)
+        }
+
+        return res.json({
             status: true,
             message: 'Create new server successfully',
             server: newServer,
         })
     } catch (err) {
-        res.json({
+        return res.status(500).json({
             status: false,
             message: 'Something went wrong',
             err: err.message,
@@ -90,16 +107,16 @@ const getServerById = async (req: Request, res: Response) => {
     const { serverId } = req.params
     try {
         if (!serverId) {
-            res.json({
+            return res.json({
                 status: false,
                 message: 'Server Id is required',
             })
         }
         const server = await getServerByID(serverId)
 
-        res.json(server)
+        return res.json(server)
     } catch (err) {
-        res.json({
+        return res.json({
             status: false,
             message: 'Something went wrong',
             err: err.message,
@@ -111,18 +128,20 @@ const updateServerById = async (req: Request, res: Response) => {
     const { id } = req.params
     try {
         await updateServer(req.body, id)
-        res.json({
+        return res.json({
             status: true,
             message: `Update server: ${id} successfully `,
         })
     } catch (err) {
-        res.json({
+        return res.json({
             status: false,
             message: 'Something went wrong',
             err: err.message,
         })
     }
 }
+
+// const getAllServerByMember = async (req: Request, res: Response) => {}
 
 export {
     getAllServerByUserId,
