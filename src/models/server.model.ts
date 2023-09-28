@@ -10,14 +10,18 @@ const serverModel: Schema = new Schema(
 
         userId: { type: String, require: true },
 
-        members: {
-            type: Schema.Types.Array,
-            ref: 'Member',
-        },
-        channels: {
-            type: Schema.Types.Array,
-            ref: 'Channel',
-        },
+        members: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Member',
+            },
+        ],
+        channels: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Channel',
+            },
+        ],
 
         createdAt: {
             type: Date,

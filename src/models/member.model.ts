@@ -12,7 +12,7 @@ const memberSchema: Schema = new Schema(
             type: String,
             required: true,
         },
-        serverId: { type: Schema.Types.ObjectId, ref: 'Server', require: true },
+        servers: [{ type: Schema.Types.ObjectId, ref: 'Server' }],
 
         messages: { type: Schema.Types.Array, ref: 'Message' },
         directMessages: { type: Schema.Types.Array, ref: 'DirectMessage' },

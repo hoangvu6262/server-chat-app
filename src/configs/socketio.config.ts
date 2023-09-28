@@ -2,6 +2,8 @@ import { Server } from 'socket.io'
 
 const socketConnection = (server: any) => {
     const io = new Server(server, {
+        path: '/api/socket/io',
+        addTrailingSlash: false,
         cors: {
             origin: 'http://localhost:3000',
             credentials: true,

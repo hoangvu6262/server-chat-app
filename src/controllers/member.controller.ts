@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { updateNewMemberServer } from '../services/server.services'
 import { IMember } from '../const/type.const'
 
 import {
@@ -6,8 +7,32 @@ import {
     creatNewMember,
     getMemberByID,
     deleteMember,
-    getMemberByUserAndServer,
+    getMemberByUser,
+    updateNewServerMember,
 } from '../services/member.services'
+
+const getMemberByUserId = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params
+
+        if (!userId) {
+            return res.json({
+                status: false,
+                message: 'userId are required',
+            })
+        }
+
+        const member: IMember | null = await getMemberByUser(userId)
+
+        return res.json(member)
+    } catch (err) {
+        return res.json({
+            status: false,
+            message: 'Something went wrong',
+            err: err.message,
+        })
+    }
+}
 
 const getAllMemberServer = async (req: Request, res: Response) => {
     try {
@@ -78,6 +103,7 @@ const deleteMemberById = async (req: Request, res: Response) => {
 const addNewMember = async (req: Request, res: Response) => {
     try {
         const body = req.body
+        const serverId = body.serverId
 
         if (!body) {
             return res.json({
@@ -86,10 +112,7 @@ const addNewMember = async (req: Request, res: Response) => {
             })
         }
 
-        const member: IMember | null = await getMemberByUserAndServer(
-            body.userId,
-            body.serverId
-        )
+        const member: IMember | null = await getMemberByUser(body.userId)
 
         if (member) {
             return res.json({
@@ -99,6 +122,8 @@ const addNewMember = async (req: Request, res: Response) => {
         }
 
         const newMember = await creatNewMember(body)
+        await updateNewMemberServer(serverId, newMember)
+        await updateNewServerMember(newMember._id, serverId)
 
         return res.json(newMember)
     } catch (err) {
@@ -110,4 +135,11 @@ const addNewMember = async (req: Request, res: Response) => {
     }
 }
 
-export { getAllMemberServer, addNewMember, getMemberById, deleteMemberById }
+export {
+    getAllMemberServer,
+    addNewMember,
+    getMemberById,
+    deleteMemberById,
+    getMemberByUser,
+    getMemberByUserId,
+}
